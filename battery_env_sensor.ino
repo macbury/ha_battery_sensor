@@ -1,8 +1,19 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
+#include <Wire.h>
+#include <SPI.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BMP280.h>
+
 #include "settings.c"
 
+#define BMP_SCK 13
+#define BMP_MISO 12
+#define BMP_MOSI 11 
+#define BMP_CS 10
+
+Adafruit_BMP280 bme;
 WiFiClient net;
 PubSubClient client(net);
 
@@ -17,7 +28,6 @@ void deepSleep () {
 }
 
 void setupWifi() {
-  delay(1000);
   Serial.println("----------");
   Serial.println("Connecting to: ");
   Serial.println(WIFI_SSID);
@@ -38,7 +48,7 @@ boolean ensureMqttConnection() {
   client.setServer(MQTT_HOST, MQTT_PORT);
   Serial.print("Attempting MQTT connection, ");
   // Create a random client ID
-  String clientId = "ESen-";
+  String clientId = "EnvSensor-";
   clientId += String(random(0xffff), HEX);
   Serial.print("client id: ");
   Serial.println(clientId);
@@ -61,10 +71,19 @@ void printWifiInfo() {
   Serial.println(WiFi.localIP());
 }
 
+void setupSensor() {
+  if (!bme.begin()) {  
+    Serial.println("Could not find a valid BMP280 sensor, check wiring!");
+    while (1);
+  }
+}
+
 void setup() {
   Serial.begin(115200);
   setupWifi();
+  setupSensor();
   if (ensureMqttConnection()) {
+
     client.publish(MQTT_TEMPERATURE_TOPIC, "0");
     client.loop();
   }
