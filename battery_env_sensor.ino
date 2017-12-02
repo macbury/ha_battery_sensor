@@ -2,18 +2,15 @@
 #include <PubSubClient.h>
 
 #include <Wire.h>
-#include <SPI.h>
 #include <Adafruit_Sensor.h>
-#include <Adafruit_BMP280.h>
+#include <Adafruit_BME280.h>
 
 #include "settings.c"
 
-#define BMP_SCK 13
-#define BMP_MISO 12
-#define BMP_MOSI 11 
-#define BMP_CS 10
+#define ESP8266_SDA  4
+#define ESP8266_SCL  2
 
-Adafruit_BMP280 bme;
+Adafruit_BME280 bme; // I2C
 WiFiClient net;
 PubSubClient client(net);
 
@@ -71,19 +68,19 @@ void printWifiInfo() {
   Serial.println(WiFi.localIP());
 }
 
-void setupSensor() {
-  if (!bme.begin()) {  
-    Serial.println("Could not find a valid BMP280 sensor, check wiring!");
-    while (1);
-  }
-}
 
 void setup() {
+  Wire.begin(ESP8266_SDA, ESP8266_SCL);
   Serial.begin(115200);
-  setupWifi();
-  setupSensor();
-  if (ensureMqttConnection()) {
+  Serial.println(F("BME280 test"));
 
+  if (!bme.begin()) {
+    Serial.println("Could not find a valid BME280 sensor, check wiring!");
+  }
+
+  setupWifi();
+  if (ensureMqttConnection()) {
+    //setupSensor();
     client.publish(MQTT_TEMPERATURE_TOPIC, "0");
     client.loop();
   }
