@@ -1,0 +1,19 @@
+#define MQTT_HOST "192.168.1.1"
+#define MQTT_PORT 1883
+
+#define MQTT_PASSWORD ""
+#define MQTT_USER ""
+
+#define MQTT_TEMPERATURE_TOPIC "home/living_room/env_sensor/temperature"
+#define MQTT_HUMIDITY_TOPIC "home/living_room/env_sensor/humidity"
+#define MQTT_PRESSURE_TOPIC "home/living_room/env_sensor/pressure"
+#define MQTT_GAS_RESISTANCE_TOPIC "home/living_room/env_sensor/gas_resistance"
+#define MQTT_ALTITUDE_TOPIC "home/living_room/env_sensor/altitude"
+#define MQTT_VOLTAGE_TOPIC "home/living_room/env_sensor/voltage"
+
+#define WIFI_SSID ""
+#define WIFI_PASSWORD ""
+
+// in seconds!
+#define DEEP_SLEEP_FOR 60 * 15
+ 
