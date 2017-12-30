@@ -15,5 +15,9 @@
 #define WIFI_PASSWORD ""
 
 // in seconds!
-#define DEEP_SLEEP_FOR 60 * 15
+#define BATTERY_SAVING_VOLTAGE 2750.0
+#define DEEP_SLEEP_FOR 60 * 20
+#define DEEP_POWER_SAVE_SLEEP_FOR 60 * 40
+
+#define LOGGING false
  
